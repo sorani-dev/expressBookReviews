@@ -6,14 +6,14 @@ const regd_users = express.Router();
 let users = [];
 
 const isValid = (username) => { //returns boolean
-  let userswithsamename = users.filter((user)=>{
+  let userswithsamename = users.filter((user) => {
     return user.username === username
   });
   return (userswithsamename.length > 0)
 }
 
 const authenticatedUser = (username, password) => { //returns boolean
-  let validusers = users.filter((user)=>{
+  let validusers = users.filter((user) => {
     return (user.username === username && user.password === password)
   });
   return (validusers.length > 0)
@@ -48,7 +48,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   username = req.session.authorization.username
   review = req.body.review
   if (!review) {
-    return res.status(401).json({'message': 'Please enter a review'})
+    return res.status(401).json({ 'message': 'Please enter a review' })
   }
 
   // Get the book from its ISBN
@@ -68,7 +68,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
   const username = req.session.authorization.username
   const book = books[isbn]
   if (!book) {
-    return res.status(404).json({"message": `Book with ISBN ${isbn} not found`})
+    return res.status(404).json({ "message": `Book with ISBN ${isbn} not found` })
   }
   if (book.reviews[username]) {
     delete book.reviews[username]

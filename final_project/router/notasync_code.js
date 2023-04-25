@@ -23,62 +23,43 @@ public_users.post("/register", (req, res) => {
 
 // Get the book list available in the shop
 public_users.get('/', async function (req, res) {
-  try {
-    const bookList = await books;
-    console.log(bookList)
-    res.send(JSON.stringify(bookList, null, 4))
-  } catch (error) {
-    console.error(error)
-    res.status(404).json({ message: "Unable to find book" });
-  }
+  res.send(JSON.stringify(bookList, null, 4))
 });
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn', async function (req, res) {
+public_users.get('/isbn/:isbn', function (req, res) {
   isbn = req.params.isbn
   try {
-    const book = (await books)[isbn]
+    const book = books[isbn]
     res.send(JSON.stringify(book, null, 4))
   } catch (error) {
-    res.status(error.status).json(error.message);
+    res.status(404).json(`Book with ISBN ${isbn} not found`);
   }
 });
 
 // Get book details based on author
-public_users.get('/author/:author', async function (req, res) {
+public_users.get('/author/:author', function (req, res) {
   const author = req.params.author
-  try {
-    const bookList = await books;
-    filteredBooks = Object.entries(bookList).filter(book => book[1].author == author)
-    return res.send(filteredBooks)
-  } catch (error) {
-    res.status(error.status).json(error.message);
-  }
+  filteredBooks = Object.entries(books).filter(book => book[1].author == author)
+  return res.send(filteredBooks)
 });
 
 // Get all books based on title
 public_users.get('/title/:title', async function (req, res) {
   const title = req.params.title
-  try {
-    const bookList = await books;
-    filteredBooks = Object.entries(bookList).filter(book => book[1].title == title)
-    res.send(filteredBooks)
-  } catch (error) {
-    res.status(error.status).json(error.message);
-  }
+  filteredBooks = Object.entries(bookList).filter(book => book[1].title == title)
+  res.send(filteredBooks)
 });
 
-// Get book review
+//  Get book review
 public_users.get('/review/:isbn', async function (req, res) {
   const isbn = req.params.isbn
   try {
-    const bookList = await books;
-    const book = bookList[isbn]
-    console.log(book)
+    const book = books[isbn]
     const review = book.reviews
     res.send(JSON.stringify(review, null, 4))
   } catch (error) {
-    res.status(error.status).json(error.message);
+    res.status(404).json(`Book with ISBN ${isbn} cannot be found`);
   }
 });
 
