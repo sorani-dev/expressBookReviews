@@ -25,7 +25,7 @@ public_users.post("/register", (req, res) => {
 public_users.get('/', async function (req, res) {
   try {
     const bookList = await books;
-    console.log(bookList)
+
     res.send(JSON.stringify(bookList, null, 4))
   } catch (error) {
     console.error(error)
@@ -74,11 +74,14 @@ public_users.get('/review/:isbn', async function (req, res) {
   try {
     const bookList = await books;
     const book = bookList[isbn]
+    if (!book) {
+      return res.status(404).json(`Cannot get review for book with ISBN ${isbn}`);
+    }
     console.log(book)
     const review = book.reviews
     res.send(JSON.stringify(review, null, 4))
   } catch (error) {
-    res.status(error.status).json(error.message);
+    res.status(404).json(error.message);
   }
 });
 

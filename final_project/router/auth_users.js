@@ -55,7 +55,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
   const book = books[isbn]
   if (book) {
     // Add a reviw and store it back into the book list
-    book[username] = review
+    book.reviews[username] = review
     books[isbn] = book
     return res.send(`Review for ISBN ${isbn} succesfully posted.`)
   }
